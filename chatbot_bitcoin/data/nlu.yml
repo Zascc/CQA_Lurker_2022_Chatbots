@@ -16,6 +16,8 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
+    - hello [bitcoin](Topic)
+    - hello [car](Topic)
 
 - intent: write_now
   examples: |

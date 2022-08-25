@@ -18,7 +18,19 @@ import json
 import random
 import os
 
+def claim_center_list_selector_bitcoin(x):
+    return {
+        "positive": ["I would say YES!", "Of course you should"],
+        "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
+        "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
+    }[x]
 
+def claim_center_list_selector_car(x):
+    return {
+        "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+        "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+        "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
+    }[x]
 
 class ActionDefaultFallback(Action):
     """Executes the fallback action and goes back to the previous state
@@ -96,13 +108,18 @@ class ActionStanceInqury(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+        topic = tracker.get_slots("Topic").lower()
+        words = 'bitcoin investment'
+        if(topic == 'car'):
+            words = 'automos driving'
+
         buttons = []
         buttons.append({"title": 'Positive', "payload": 'Positive'})
         buttons.append({"title": 'Neutral', "payload": 'Neutral'})
         buttons.append({"title": 'Negative', "payload": 'Negative'})
         
         dispatcher.utter_message(text="First, let me know your stance on this topic.")
-        dispatcher.utter_message(text='What’s your attitude on the Bitcoin investment?', buttons=buttons)
+        dispatcher.utter_message(text='What’s your attitude on the {}?'.format(words), buttons=buttons)
         return [SlotSet('ClaimIndex', '0')]
 
         
@@ -114,8 +131,12 @@ class ActionEncouragement(Action):
     def run(self, dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        text = "I do understand the difficulties to create something meaningful as my mind is restricted by the algorithms. But together, with your true potential, we can achieve something significant! To take the first step, just tell me your attitude on the Bitcoin investment."
+        topic = tracker.get_slots("Topic").lower()
+        words = 'bitcoin investment'
+        if(topic == 'car'):
+            words = 'automos driving'
+
+        text = "I do understand the difficulties to create something meaningful as my mind is restricted by the algorithms. But together, with your true potential, we can achieve something significant! To take the first step, just tell me your attitude on the {}.".format(words)
         dispatcher.utter_message(text=text)
         return []
 
@@ -139,12 +160,7 @@ class ActionClaimSuggestion(Action):
                 "neutral": 7,
                 "negative": 3
             }[x]
-        def claim_center_list_selector(x):
-            return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
-            }[x]
+
         
         def extreme_claim_center_selector(x):
             return {
@@ -153,6 +169,11 @@ class ActionClaimSuggestion(Action):
                 "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous."]
             }[x]
         num_of_claim_center = num_of_claim_center_selector(stance)
+
+        topic = tracker.get_slots("Topic").lower()
+        claim_center_list_selector = claim_center_list_selector_bitcoin
+        if(topic == 'car'):
+            claim_center_list_selector = claim_center_list_selector_car
 
         claim_center_list = claim_center_list_selector(stance)
 
@@ -223,12 +244,12 @@ class ActionKeywordsMatching(Action):
             keywordsData = json.load(f)
         stance = tracker.get_slot('StanceCategory').lower()
         chosenClaimCenter = tracker.get_slot('ChosenClaimCenter')
-        def claim_center_list_selector(x):
-            return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
-            }[x]
+
+        topic = tracker.get_slots("Topic").lower()
+        claim_center_list_selector = claim_center_list_selector_bitcoin
+        if(topic == 'car'):
+            claim_center_list_selector = claim_center_list_selector_car
+
 
         chosenClaimCenterText = claim_center_list_selector(stance)[int(chosenClaimCenter[-1])]
 
@@ -264,12 +285,10 @@ class ActionKeywordsPrompting(Action):
         stance = tracker.get_slot('StanceCategory').lower()
         chosenClaimCenter = tracker.get_slot('ChosenClaimCenter')
 
-        def claim_center_list_selector(x):
-            return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
-            }[x]
+        topic = tracker.get_slots("Topic").lower()
+        claim_center_list_selector = claim_center_list_selector_bitcoin
+        if(topic == 'car'):
+            claim_center_list_selector = claim_center_list_selector_car
 
         chosenClaimCenterText = claim_center_list_selector(stance)[int(chosenClaimCenter[-1])]
         
@@ -297,13 +316,11 @@ class ActionInfoDisplaying(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        def claim_center_list_selector(x):
-            return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
-            }[x]
-
+        topic = tracker.get_slots("Topic").lower()
+        claim_center_list_selector = claim_center_list_selector_bitcoin
+        
+        if(topic == 'car'):
+            claim_center_list_selector = claim_center_list_selector_car
         stance = tracker.get_slot('StanceCategory').lower()
         if(stance != 'na'):
             chosenClaimCenter = claim_center_list_selector(stance)[int(tracker.get_slot('ChosenClaimCenter')[-1:])]
@@ -311,7 +328,7 @@ class ActionInfoDisplaying(Action):
             chosenClaimCenter = 'na'
         
         keywords = tracker.get_slot('Keywords')
-        text = "Information Data: \nMy attitude towards investing in Bitcoin is {}. For the bitcoin topic, I agree with the view that '{}'. My argument mainly has the following aspects: {}.".format(stance, chosenClaimCenter, keywords)
+        text = "Information Data: \n------------------------------\nNote for you: (will not appear in the final post)\nMy attitude: {}.\nStand: {}.\nKeywords:{}.\n----------write your post below----------".format(stance, chosenClaimCenter, keywords)
 
         dispatcher.utter_message(text=text)
         return []
