@@ -17,7 +17,6 @@ intents:
 entities:
 - StanceCategory
 - ChosenClaimCenter
-- Topic
 slots:
   StanceCategory:
     type: text
@@ -45,13 +44,6 @@ slots:
     influence_conversation: false
     mappings:
     - type: custom
-  Topic:
-    type: text
-    initial_value: NA
-    influence_conversation: false
-    mappings:
-    - type: from_entity
-      entity: Topic
 responses:
   utter_not_understand:
   - text: Sorry, I cannot understand what you mean.
