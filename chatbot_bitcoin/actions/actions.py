@@ -317,7 +317,7 @@ class ActionInfoDisplaying(Action):
             chosenClaimCenter = 'na'
         
         keywords = tracker.get_slot('Keywords')
-        text = "Information Data: \n------------------------------\nNote for you: (will not appear in the final post)\nMy attitude: {}.\nStand: {}.\nKeywords:{}.\n----------write your post below----------".format(stance, chosenClaimCenter, keywords)
+        text = "Note for you:\nMy attitude: {}.\nStand: {}.\nKeywords:{}.".format(stance, chosenClaimCenter, keywords)
 
         dispatcher.utter_message(text=text)
         return []
