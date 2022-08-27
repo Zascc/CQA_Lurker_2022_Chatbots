@@ -313,7 +313,7 @@ class ActionInfoDisplaying(Action):
             chosenClaimCenter = 'na'
         
         keywords = tracker.get_slot('Keywords')
-        text = "Information Data: \nMy attitude towards automos driving is {}. For the bitcoin topic, I agree with the view that '{}'. My argument mainly has the following aspects: {}.".format(stance, chosenClaimCenter, keywords)
+        text = "Note for you:\nMy attitude: {}.\nStand: {}.\nKeywords:{}.".format(stance, chosenClaimCenter, keywords)
 
         dispatcher.utter_message(text=text)
         return []
