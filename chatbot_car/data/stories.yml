@@ -16,6 +16,7 @@ stories:
   - intent: check_notes
   - action: info_displaying_action
   - action: write_or_back_action
+  - checkpoint: check_notes_switch
 
 - story: explore after initialization
   steps:
@@ -66,6 +67,7 @@ stories:
   steps:
   - checkpoint: suggestion_switch
   - intent: check_notes
+  - action: info_displaying_action
   - action: write_or_back_action
   - checkpoint: check_notes_switch
 
@@ -77,6 +79,7 @@ stories:
   - intent: provide_keywords
   - action: keywords_matching_action
   - intent: check_notes
+  - action: info_displaying_action
   - action: write_or_back_action
   - checkpoint: check_notes_switch
 
@@ -86,6 +89,7 @@ stories:
   - intent: no_idea
   - action: keywords_prompting_action
   - intent: check_notes
+  - action: info_displaying_action
   - action: write_or_back_action
   - checkpoint: check_notes_switch
 
