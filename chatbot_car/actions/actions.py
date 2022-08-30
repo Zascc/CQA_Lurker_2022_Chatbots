@@ -107,7 +107,7 @@ class ActionStanceInqury(Action):
         buttons.append({"title": 'Negative', "payload": 'Negative'})
         
         dispatcher.utter_message(text="First, let me know your stance on this topic.")
-        dispatcher.utter_message(text='What’s your attitude on the bitcoin investment?', buttons=buttons)
+        dispatcher.utter_message(text='What’s your attitude on the automos driving?', buttons=buttons)
         return [SlotSet('ClaimIndex', '0')]
 
         
@@ -121,7 +121,7 @@ class ActionEncouragement(Action):
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
 
-        text = "I do understand the difficulties to create something meaningful as my mind is restricted by the algorithms. But together, with your true potential, we can achieve something significant! To take the first step, just tell me your attitude on the bitcoin investment."
+        text = "I do understand the difficulties to create something meaningful as my mind is restricted by the algorithms. But together, with your true potential, we can achieve something significant! To take the first step, just tell me your attitude on the automos driving."
         dispatcher.utter_message(text=text)
         return []
 
@@ -157,9 +157,9 @@ class ActionClaimSuggestion(Action):
 
         def claim_center_list_selector(x):
             return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
+                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
 
         claim_center_list = claim_center_list_selector(stance)
@@ -215,7 +215,7 @@ class ActionAskingKeywords(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        text = "Sure! You can give me some keywords related to the Bitcoin background and I will check through my database. Please give the keywords in the form of **'Keywords: <keywords A> <keyword B>......'**"
+        text = "Sure! You can give me some keywords related to the automos driving and I will check through my database. Please give the keywords in the form of **'Keywords: <keywords A> <keyword B>......'**"
         dispatcher.utter_message(text=text)
         
         
@@ -236,9 +236,9 @@ class ActionKeywordsMatching(Action):
 
         def claim_center_list_selector(x):
             return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
+                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
 
         chosenClaimCenterText = claim_center_list_selector(stance)[int(chosenClaimCenter[-1])]
@@ -277,9 +277,9 @@ class ActionKeywordsPrompting(Action):
 
         def claim_center_list_selector(x):
             return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
+                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
 
         chosenClaimCenterText = claim_center_list_selector(stance)[int(chosenClaimCenter[-1])]
@@ -310,9 +310,9 @@ class ActionInfoDisplaying(Action):
 
         def claim_center_list_selector(x):
             return {
-                "positive": ["I would say YES!", "Of course you should"],
-                "neutral": ["It’s not too late to invest.", "That’s up to you.", "It depends what your level of disposable income is, how great your assets are, and what other assets you have invested in.", "The significant thing is to do your own research and comprehend the dangers.", "Invest in Bitcoin, only if you are okay to loss all.", "Investing in Bitcoin is viable option especially in a view of current decline of the power of Fiat currencies.", "If you are willing to take the risk, first make sure you understand what you are investing in and have a crypto investment strategy"],
-                "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous.", "It is almost certainly in a bubble."]
+                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
             
         stance = tracker.get_slot('StanceCategory').lower()
