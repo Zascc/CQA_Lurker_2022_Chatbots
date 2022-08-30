@@ -14,6 +14,7 @@ intents:
 - restart_session
 - start
 - choose_stance_again
+- check_notes
 entities:
 - StanceCategory
 - ChosenClaimCenter
@@ -67,3 +68,4 @@ actions:
 - ask_for_keywords_action
 - default_fallback_action
 - info_displaying_action
+- write_or_back_action

@@ -78,3 +78,8 @@ nlu:
   examples: |
     - not interested
     - I am not interested in those claims.
+
+- intent: check_notes
+  examples: |
+    - check notes before writing
+    - I want to check the notes.

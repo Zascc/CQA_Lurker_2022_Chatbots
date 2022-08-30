@@ -10,12 +10,12 @@ stories:
   - action: initialization_action
   - checkpoint: initialization_switch
 
-- story: write now after initialization
+- story: check notes after initialization
   steps:
   - checkpoint: initialization_switch
-  - intent: write_now
-  - action: answer_writing_action
+  - intent: check_notes
   - action: info_displaying_action
+  - action: write_or_back_action
 
 - story: explore after initialization
   steps:
@@ -65,9 +65,9 @@ stories:
 - story: write now after suggestion
   steps:
   - checkpoint: suggestion_switch
-  - intent: write_now
-  - action: answer_writing_action
-  - action: info_displaying_action
+  - intent: check_notes
+  - action: write_or_back_action
+  - checkpoint: check_notes_switch
 
 - story: some idea after suggestion
   steps:
@@ -76,15 +76,23 @@ stories:
   - action: ask_for_keywords_action
   - intent: provide_keywords
   - action: keywords_matching_action
-  - intent: write_now
-  - action: answer_writing_action
-  - action: info_displaying_action
+  - intent: check_notes
+  - action: write_or_back_action
+  - checkpoint: check_notes_switch
 
 - story: no idea after suggestion
   steps:
   - checkpoint: suggestion_switch
   - intent: no_idea
   - action: keywords_prompting_action
+  - intent: check_notes
+  - action: write_or_back_action
+  - checkpoint: check_notes_switch
+
+
+- story: switch after check notes
+  steps:
+  - checkpoint: check_notes_switch
   - intent: write_now
   - action: answer_writing_action
   - action: info_displaying_action

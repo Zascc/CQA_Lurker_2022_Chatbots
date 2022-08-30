@@ -8,6 +8,7 @@
 # This is a simple example for a custom action which utters "Hello World!"
 
 from dis import dis
+from distutils.log import info
 from tkinter import Button
 from typing import Any, Text, Dict, List
 
@@ -17,6 +18,8 @@ from rasa_sdk.events import SlotSet, Restarted, SessionStarted, ActionExecuted, 
 import json
 import random
 import os
+
+
 
 
 
@@ -53,7 +56,7 @@ class ActionGreetAndIntro(Action):
 
         text = "Hi, I have read all the answer posts to be knowledgeable but I cannot be as creative as you with my awkward mind. Let’s contribute something amazing together!"
         buttons = []
-        buttons.append({'title': 'Start writing', 'payload': 'Start writing'})
+        buttons.append({'title': 'Start', 'payload': 'Start'})
         dispatcher.utter_message(text=text, buttons=buttons)
         return []
 
@@ -68,9 +71,11 @@ class ActionInitialization(Action):
 
 
         buttons = []
-        buttons.append({"title": 'Write now' , "payload": 'Write now!'})
-        buttons.append({"title": 'Explore More', "payload": 'I want to explore more about this topic.'})
+        
+        buttons.append({"title": 'Explore more', "payload": 'I want to explore more about this topic.'})
         buttons.append({"title": 'Not now', "payload": 'I have no idea on this topic.'})
+        buttons.append({"title": 'Check notes before writing' , "payload": 'I want to check notes.'})
+
         text = "Already got something in mind? Share with me to clear your concerns!"
         
         dispatcher.utter_message(text=text, buttons=buttons)
@@ -84,7 +89,7 @@ class ActionWriteNow(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        dispatcher.utter_message(text='You can now start writing by clicking on the "Write Answer" button!')
+        dispatcher.utter_message(text='You can now start writing by clicking on the "Write Answer" button!\The final notes for you is shown below:')
         return []
 
 
@@ -114,7 +119,8 @@ class ActionEncouragement(Action):
     def run(self, dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
+
+
         text = "I do understand the difficulties to create something meaningful as my mind is restricted by the algorithms. But together, with your true potential, we can achieve something significant! To take the first step, just tell me your attitude on the automos driving."
         dispatcher.utter_message(text=text)
         return []
@@ -139,12 +145,7 @@ class ActionClaimSuggestion(Action):
                 "neutral": 7,
                 "negative": 3
             }[x]
-        def claim_center_list_selector(x):
-            return {
-                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
-                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
-                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
-            }[x]
+
         
         def extreme_claim_center_selector(x):
             return {
@@ -153,6 +154,13 @@ class ActionClaimSuggestion(Action):
                 "negative": ["Bitcoin is pretty useless. But so is gold.", "Cryto currency is an extremely high-hazard venture, and CFDs bought on margin are significantly more hazardous."]
             }[x]
         num_of_claim_center = num_of_claim_center_selector(stance)
+
+        def claim_center_list_selector(x):
+            return {
+                "positive": ["I love to drive on a nice day with little or no traffic. At all other times, I'll have my car drive for me.", "Yes.", "Yes - in a few years it might be safer than me driving.","Yes, I would."],
+                "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
+                "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
+            }[x]
 
         claim_center_list = claim_center_list_selector(stance)
 
@@ -192,9 +200,11 @@ class ActionKeywordsSelecting(Action):
         
         text = "Good job! After choosing the claim, are you ready to write something? Or I can discuss with you, sharing the hints if you want."
         buttons = []
-        buttons.append({"title": "Write now!", "payload": "Write now!"})
-        buttons.append({"title": "Discuss Keywords", "payload": "I have some keywords to discuss with you."})
-        buttons.append({"title": "Get Hints", "payload": "I want to get some hints from you."})
+        
+        buttons.append({"title": "Discuss keywords", "payload": "I have some keywords to discuss with you."})
+        buttons.append({"title": "Get hints", "payload": "I want to get some hints from you."})
+        buttons.append({"title": "Check notes before writing", "payload": "I want to check the notes."})
+
         dispatcher.utter_message(text=text, buttons=buttons)
         return []
 class ActionAskingKeywords(Action):
@@ -205,7 +215,7 @@ class ActionAskingKeywords(Action):
         tracker: Tracker,
         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        text = "Sure! You can give me some keywords related to the automos driving background and I will check through my database. Please give the keywords in the form of 'Keywords: <keywords A> <keyword B>......'"
+        text = "Sure! You can give me some keywords related to the automos driving background and I will check through my database. Please give the keywords in the form of **'Keywords: <keywords A> <keyword B>......'**"
         dispatcher.utter_message(text=text)
         
         
@@ -246,7 +256,7 @@ class ActionKeywordsMatching(Action):
         keywordsText = lowFrequentKeywordsText + highFrequentKeywordsText + relatedKeywordsText
         text = "I ran a quick search and here are what you may consier:\nNot mentioned before: **{}**.\nMentioned in some posts: **{}**.\nRelated keywords to consider: **{}**.\n You can try to write your own post now!".format(lowFrequentKeywordsText, highFrequentKeywordsText, relatedKeywordsText)
         buttons = []
-        buttons.append({"title":'Write now!', "payload": 'Write now!'})
+        buttons.append({"title":'Check notes before writing', "payload": 'I want to check the notes.'})
         buttons.append({"title": 'Restart', 'payload': '/restart'})
 
         dispatcher.utter_message(text='You have chosen the claim **{}**'.format(chosenClaimCenterText))
@@ -272,7 +282,6 @@ class ActionKeywordsPrompting(Action):
                 "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
 
-
         chosenClaimCenterText = claim_center_list_selector(stance)[int(chosenClaimCenter[-1])]
         
 
@@ -283,7 +292,7 @@ class ActionKeywordsPrompting(Action):
         keywordsText = '{}, {}, {}, {}'.format(*keywordsTextList)
         text = "Here are some topic you can talk about:\n**{}**\nWe can do this again if still clueless. Believe me, I can do this all day with endless energy!".format(keywordsText)
         buttons = []
-        buttons.append({"title":'Write now!', "payload": 'Write now!'})
+        buttons.append({"title":'Check notes before writing', "payload": 'I want to check the notes.'})
         buttons.append({"title": 'Restart', 'payload': '/restart'})
 
 
@@ -305,15 +314,41 @@ class ActionInfoDisplaying(Action):
                 "neutral": ["Yes, as soon as they work and are available at a reasonable price.", "Not at the time of answering.", "Yes, I really would like to have a self-driving car."],
                 "negative": ["In the case I've described two paragraphs above, I'm really lost as to what fact based evidence could be used to chose the human.", "No. It is too early in the technology to be able to trust the self-driving car.", "Nope. Absolutely not!"]
             }[x]
-
+            
         stance = tracker.get_slot('StanceCategory').lower()
         if(stance != 'na'):
             chosenClaimCenter = claim_center_list_selector(stance)[int(tracker.get_slot('ChosenClaimCenter')[-1:])]
         else:
             chosenClaimCenter = 'na'
         
+        
+
+        
+            
+
         keywords = tracker.get_slot('Keywords')
+
+        infoList = [stance, chosenClaimCenter, keywords]
+        for i in infoList:
+            if(i.lower() == 'na'):
+                i = "Have not discussed yet."
         text = "Note for you:\nMy attitude: {}.\nStand: {}.\nKeywords:{}.".format(stance, chosenClaimCenter, keywords)
 
         dispatcher.utter_message(text=text)
+        return []
+
+class ActionWriteOrBack(Action):
+    def name(self) -> Text:
+        return "write_or_back_action"
+
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        
+
+        buttons = []
+        buttons.append({'title': 'Write now!', 'payload': 'Write now!'})
+        buttons.append({'title': 'Restart', 'payload': '/restart'})
+        dispatcher.utter_message(text='You can now either start writing or restart the discussion with the chatbot again.', buttons=buttons)
         return []
