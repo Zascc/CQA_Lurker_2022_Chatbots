@@ -328,11 +328,15 @@ class ActionInfoDisplaying(Action):
 
         keywords = tracker.get_slot('Keywords')
 
-        infoList = [stance, chosenClaimCenter, keywords]
-        for i in infoList:
-            if(i.lower() == 'na'):
-                i = "Have not discussed yet."
-        text = "Note for you:\nMy attitude: {}.\nStand: {}.\nKeywords:{}.".format(stance, chosenClaimCenter, keywords)
+        if(stance.lower() == 'na'):
+            stance = 'Have not discussed yet'
+        if(chosenClaimCenter.lower() == 'na'):
+            chosenClaimCenter = 'Have not discussed yet'
+        if(keywords.lower() == 'na'):
+            keywords = 'Have not discussed yet'
+        
+
+        text = "Note for you:\nMy attitude: {}.\nStand: {}.\nKeywords: {}.".format(stance, chosenClaimCenter, keywords)
 
         dispatcher.utter_message(text=text)
         return []
